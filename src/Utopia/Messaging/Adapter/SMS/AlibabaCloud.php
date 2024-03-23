@@ -21,12 +21,11 @@ class AlibabaCloud  extends SMSAdapter{
     /**
      * @param  string  $accessKeyId AlibabaCloud Access Key ID
      * @param  string  $accessKeySecret AlibabaCloud Access Key Secret
-     * @param  string  $templateCode AlibabaCloud SMS Template Code
      */
     public function __construct(
         private string $accessKeyId,
         private string $accessKeySecret,
-        private string $templateCode, 
+        private ?string $from = null
     ) {
     }
 
@@ -60,7 +59,7 @@ class AlibabaCloud  extends SMSAdapter{
      */
     public static function createApiInfo(){
         $params = new Params([
-            "action" => "SendMessageWithTemplate",
+            "action" => "SendMessageToGlobe",
             "version" => "2018-05-01",
             "protocol" => "HTTPS",
             "method" => "POST",
@@ -81,9 +80,8 @@ class AlibabaCloud  extends SMSAdapter{
         $params = self::createApiInfo();
         $queries = [
             "To" => $message->getTo()[0],
-            "From" => $message->getFrom(),
-            "TemplateCode" => $this->templateCode,
-            "TemplateParam" => json_encode(["code" => $message->getContent()])
+            "From" => $this->from ?? $message->getFrom(),
+            "Message" => $message->getContent(),
         ];
 
         // runtime options

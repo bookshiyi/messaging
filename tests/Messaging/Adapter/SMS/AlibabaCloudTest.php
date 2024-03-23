@@ -15,12 +15,11 @@ class AlibabaCloudTest extends Base
     {
         $sender = new AlibabaCloud(
             \getenv('ALIBABACLOUD_ACCESS_KEY_ID'), 
-            \getenv('ALIBABACLOUD_ACCESS_KEY_SECRET'), 
-            \getenv('ALIBABACLOUD_TEMPLATE_CODE'));
+            \getenv('ALIBABACLOUD_ACCESS_KEY_SECRET'));
         $message = new SMS(
             from: \getenv('ALIBABACLOUD_FROM'),
             to: [\getenv('ALIBABACLOUD_TO')],
-            content: '123456'
+            content: 'Test Content'
         );
 
         $response = $sender->send($message);
