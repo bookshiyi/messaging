@@ -21,14 +21,12 @@ class AlibabaCloud  extends SMSAdapter{
     /**
      * @param  string  $accessKeyId AlibabaCloud Access Key ID
      * @param  string  $accessKeySecret AlibabaCloud Access Key Secret
-     * @param  string  $signName AlibabaCloud SMS Sign Name
      * @param  string  $templateCode AlibabaCloud SMS Template Code
      */
     public function __construct(
-        private string $accessKeyId,        
-        private string $accessKeySecret,    
-        private string $signName,           
-        private string $templateCode,       
+        private string $accessKeyId,
+        private string $accessKeySecret,
+        private string $templateCode, 
     ) {
     }
 
@@ -50,7 +48,8 @@ class AlibabaCloud  extends SMSAdapter{
             "accessKeyId" => $this->accessKeyId,
             "accessKeySecret" => $this->accessKeySecret
         ]);
-        $config->endpoint = "dysmsapi.aliyuncs.com";
+        // $config->endpoint = "dysmsapi.aliyuncs.com";
+        $config->endpoint = "dysmsapi.ap-southeast-1.aliyuncs.com";
         $client = new OpenApiClient($config);
         return $client;
     }
@@ -59,10 +58,10 @@ class AlibabaCloud  extends SMSAdapter{
      * API Info
      * @return Params OpenApi.Params
      */
-    private static function createApiInfo(){
+    public static function createApiInfo(){
         $params = new Params([
-            "action" => "SendSms",
-            "version" => "2017-05-25",
+            "action" => "SendMessageWithTemplate",
+            "version" => "2018-05-01",
             "protocol" => "HTTPS",
             "method" => "POST",
             "authType" => "AK",
@@ -81,8 +80,8 @@ class AlibabaCloud  extends SMSAdapter{
         $client = self::createClient();
         $params = self::createApiInfo();
         $queries = [
-            "PhoneNumbers" => $message->getTo()[0],
-            "SignName" => $this->signName,
+            "To" => $message->getTo()[0],
+            "From" => $message->getFrom(),
             "TemplateCode" => $this->templateCode,
             "TemplateParam" => json_encode(["code" => $message->getContent()])
         ];

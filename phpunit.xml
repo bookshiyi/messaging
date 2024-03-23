@@ -8,7 +8,7 @@
 >
     <testsuites>
         <testsuite name="Application Test Suite">
-            <directory>./tests/</directory>
+            <directory>./tests/Messaging/Adapter/SMS</directory>
         </testsuite>
     </testsuites>
 </phpunit>
